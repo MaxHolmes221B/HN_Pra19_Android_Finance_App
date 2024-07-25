@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">Android-template</string>
+    <string name="app_name">Crypto Currency</string>
+    <string name="coin_image">coin_image</string>
+    <string name="market_cap">Market cap:</string>
+    <string name="volume">Vol</string>
+    <string name="time_period">(24h):</string>
+    <string name="home">Home</string>
+    <string name="favourite">Favourite</string>
+    <string name="search">Search</string>
+    <string name="setting">Setting</string>
 </resources>
