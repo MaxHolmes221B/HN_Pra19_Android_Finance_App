@@ -77,37 +77,63 @@
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/filterLayout"
-        android:layout_width="0dp"
+    <Spinner
+        android:id="@+id/spinner_currency"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/summaryLayout">
+        app:layout_constraintTop_toBottomOf="@id/summaryLayout"
+        android:layout_marginStart="10dp"
+        />
+    <Spinner
+        android:id="@+id/spinner_time_period"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/spinner_currency"
+        app:layout_constraintTop_toBottomOf="@id/summaryLayout"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_order"
+        />
+    <Spinner
+        android:id="@+id/spinner_order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/spinner_time_period"
+        app:layout_constraintTop_toBottomOf="@id/summaryLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"
+        />
 
-        <Spinner
-            android:id="@+id/spinnerCurrency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/currencies" />
 
-        <Spinner
-            android:id="@+id/spinnerTimeFrame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:entries="@array/timeframes" />
+<!--    <LinearLayout-->
+<!--        android:id="@+id/filterLayout"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:padding="16dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/summaryLayout">-->
 
-        <Spinner
-            android:id="@+id/spinnerMetric"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:entries="@array/metrics" />
-    </LinearLayout>
+<!--        <Spinner-->
+<!--            android:id="@+id/spinnerCurrency"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:entries="@array/currencies" />-->
+
+<!--        <Spinner-->
+<!--            android:id="@+id/spinnerTimeFrame"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:entries="@array/timeframes" />-->
+
+<!--        <Spinner-->
+<!--            android:id="@+id/spinnerMetric"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:entries="@array/metrics" />-->
+<!--    </LinearLayout>-->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
