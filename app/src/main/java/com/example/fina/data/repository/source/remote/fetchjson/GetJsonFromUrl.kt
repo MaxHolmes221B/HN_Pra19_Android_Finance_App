@@ -1,27 +1,24 @@
 package com.example.fina.data.repository.source.remote.fetchjson
 
-
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.example.fina.data.repository.source.remote.OnResultListener
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.lang.Exception
-import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
-class GetJsonFromUrl<T>(
+class GetJsonFromUrl<T> constructor(
     private val urlString: String,
     private val keyEntity: String,
-    private val listener: OnResultListener<T>
+    private val listener: OnResultListener<T>,
 ) {
-
     private val mExecutor: Executor = Executors.newSingleThreadExecutor()
-    private val mHandler = Handler(Looper.getMainLooper())
+    private val mHandler: Handler = Handler(Looper.getMainLooper())
     private var data: T? = null
 
     init {
@@ -30,16 +27,12 @@ class GetJsonFromUrl<T>(
 
     private fun callAPI() {
         mExecutor.execute {
-            try {
-                val responseJson = getJsonStringFromUrl(urlString)
-                data = ParseDataWithJson().parseJsonToData(JSONObject(responseJson), keyEntity) as? T
-                mHandler.post {
-                    data?.let { listener.onSuccess(it) }
-                }
-            } catch (e: Exception) {
-                mHandler.post {
-                    listener.onError(e)
-                }
+            val responseJson =
+                getJsonStringFromUrl(urlString)
+            data =
+                ParseDataWithJson.parseJsonToData(JSONObject(responseJson), keyEntity) as? T
+            mHandler.post {
+                data?.let { listener.onSuccess(it) }
             }
         }
     }
@@ -55,7 +48,7 @@ class GetJsonFromUrl<T>(
             connect()
         }
 
-        val bufferedReader = BufferedReader(InputStreamReader(httpURLConnection?.inputStream))
+        val bufferedReader = BufferedReader(InputStreamReader(url.openStream()))
         val stringBuilder = StringBuilder()
         var line: String?
         while (bufferedReader.readLine().also { line = it } != null) {
@@ -63,6 +56,7 @@ class GetJsonFromUrl<T>(
         }
         bufferedReader.close()
         httpURLConnection?.disconnect()
+        Log.d("Response", stringBuilder.toString())
         return stringBuilder.toString()
     }
 

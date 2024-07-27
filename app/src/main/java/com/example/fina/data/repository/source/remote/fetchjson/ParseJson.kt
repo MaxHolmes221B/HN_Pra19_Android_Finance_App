@@ -1,20 +1,18 @@
 package com.example.fina.data.repository.source.remote.fetchjson
 
-
-import android.util.Log
 import com.example.fina.data.model.Coin
 import com.example.fina.data.model.CoinStats
+import com.example.fina.data.model.PriceHistory
+import com.example.fina.data.model.Supply
 import org.json.JSONArray
 import org.json.JSONObject
 
-class ParseJson {
-
-    fun coinParseJson(jsonObject: JSONObject): Coin {
-        return Coin().apply {
+object ParseJson {
+    fun coinParseJson(jsonObject: JSONObject) =
+        Coin().apply {
             uuid = jsonObject.getString("uuid")
             symbol = jsonObject.getString("symbol")
             name = jsonObject.getString("name")
-            color = jsonObject.optString("color")
             iconUrl = jsonObject.optString("iconUrl")
             marketCap = jsonObject.getString("marketCap")
             price = jsonObject.getString("price")
@@ -24,12 +22,11 @@ class ParseJson {
             rank = jsonObject.getInt("rank")
             sparkline = parseSparkline(jsonObject.optJSONArray("sparkline"))
             lowVolume = jsonObject.optBoolean("lowVolume")
-            coinrankingUrl = jsonObject.getString("coinrankingUrl")
-            volume = jsonObject.optString("24hVolume")
+            volume24h = jsonObject.optString("24hVolume")
             btcPrice = jsonObject.getString("btcPrice")
-            contractAddresses = parseContractAddresses(jsonObject.optJSONArray("contractAddresses"))
+            supply = supplyParseJson(jsonObject.optJSONObject("supply"))
+            allTimeHigh = priceHistoryParseJson(jsonObject.optJSONObject("allTimeHigh"))
         }
-    }
 
     fun coinStatsParseJson(jsonObject: JSONObject): CoinStats {
         return CoinStats().apply {
@@ -42,8 +39,8 @@ class ParseJson {
         }
     }
 
-    private fun parseSparkline(jsonArray: JSONArray?): List<String?> {
-        val sparkline = mutableListOf<String?>()
+    private fun parseSparkline(jsonArray: JSONArray?): List<String> {
+        val sparkline = mutableListOf<String>()
         jsonArray?.let {
             for (i in 0 until it.length()) {
                 sparkline.add(it.optString(i))
@@ -52,13 +49,24 @@ class ParseJson {
         return sparkline
     }
 
-    private fun parseContractAddresses(jsonArray: JSONArray?): List<String> {
-        val contractAddresses = mutableListOf<String>()
-        jsonArray?.let {
-            for (i in 0 until it.length()) {
-                contractAddresses.add(it.optString(i))
-            }
+    private fun supplyParseJson(jsonObject: JSONObject?): Supply {
+        val supply = Supply()
+        jsonObject?.let {
+            supply.confirmed = it.getBoolean("confirmed")
+            supply.supplyAt = it.getLong("supplyAt")
+            supply.max = it.getString("max")
+            supply.total = it.getString("total")
+            supply.circulating = it.getString("circulating")
         }
-        return contractAddresses
+        return supply
+    }
+
+    fun priceHistoryParseJson(jsonObject: JSONObject?): PriceHistory {
+        val priceHistory = PriceHistory()
+        jsonObject?.let {
+            priceHistory.price = it.getString("price")
+            priceHistory.timestamp = it.getLong("timestamp")
+        }
+        return priceHistory
     }
 }

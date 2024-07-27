@@ -8,4 +8,10 @@
     <string name="favourite">Favourite</string>
     <string name="search">Search</string>
     <string name="setting">Setting</string>
+    <string name="percentage_text">%1$d%%</string>
+    <string name="total_coins_stats">Total Coins:</string>
+    <string name="total_market_cap_stats">Total Market Cap:</string>
+    <string name="total_marketplace_stats">Total Marketplace:</string>
+    <string name="vol_24h_stats">Vol (24h):</string>
+    <string name="one_hour">1 hour</string>
 </resources>

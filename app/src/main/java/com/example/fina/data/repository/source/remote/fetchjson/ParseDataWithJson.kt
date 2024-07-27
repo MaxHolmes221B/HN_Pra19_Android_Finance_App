@@ -1,94 +1,81 @@
 package com.example.fina.data.repository.source.remote.fetchjson
 
 import android.util.Log
-import com.example.fina.data.model.Coin
-import com.example.fina.data.model.CoinStats
+import com.example.fina.data.model.ResponseEntry
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
-class ParseDataWithJson {
-    fun parseJsonToData(jsonObject: JSONObject?, keyEntity: String): Any {
+object ParseDataWithJson {
+    fun parseJsonToData(
+        jsonObject: JSONObject?,
+        keyEntity: String,
+    ): Any? {
+        val jsonDataObject = jsonObject?.getJSONObject(ResponseEntry.DATA)
         return when (keyEntity) {
-            "data.coins" -> parseCoins(jsonObject?.optJSONObject("data")?.optJSONArray("coins"))
-            "data.stats" -> parseCoinStats(jsonObject?.optJSONObject("data")?.optJSONObject("stats"))
-            else -> emptyList<Any>() // Default case or unknown keyEntity
+            ResponseEntry.COINS ->
+                parseJsonToListObject(
+                    jsonDataObject?.optJSONArray(ResponseEntry.COINS),
+                    keyEntity,
+                )
+
+            ResponseEntry.COIN ->
+                parseJsonToObject(
+                    jsonDataObject?.optJSONObject(ResponseEntry.COIN),
+                    keyEntity,
+                )
+
+            ResponseEntry.PRICE_HISTORY ->
+                parseJsonToListObject(
+                    jsonDataObject?.optJSONArray(ResponseEntry.PRICE_HISTORY),
+                    keyEntity
+                )
+
+            ResponseEntry.STATS ->
+                parseJsonToObject(
+                    jsonDataObject?.optJSONObject(ResponseEntry.STATS),
+                    keyEntity
+                )
+
+            else -> Any()
         }
     }
 
-    private fun parseCoins(jsonArray: JSONArray?): List<Coin> {
-        val coins = mutableListOf<Coin>()
+    private fun parseJsonToListObject(
+        jsonArray: JSONArray?,
+        keyEntity: String,
+    ): MutableList<Any> {
+        val data = mutableListOf<Any>()
         try {
             for (i in 0 until (jsonArray?.length() ?: 0)) {
-                val coinObject = jsonArray?.optJSONObject(i)
-                val coin = parseCoin(coinObject)
-                coin?.let {
-                    coins.add(it)
+                val item = parseJsonToObject(jsonArray?.getJSONObject(i), keyEntity)
+                item?.let {
+                    data.add(it)
                 }
             }
         } catch (e: JSONException) {
-            Log.e("ParseDataWithJson", "parseCoins: ", e)
+            Log.e("ParseDataWithJson", "parseJsonToData: ", e)
         }
-        return coins
+        return data
     }
 
-    private fun parseCoin(jsonObject: JSONObject?): Coin? {
+    private fun parseJsonToObject(
+        jsonObject: JSONObject?,
+        keyEntity: String,
+    ): Any? {
         try {
             jsonObject?.let {
-                return Coin(
-                    uuid = it.optString("uuid"),
-                    symbol = it.optString("symbol"),
-                    name = it.optString("name"),
-                    color = it.optString("color"),
-                    iconUrl = it.optString("iconUrl"),
-                    marketCap = it.optString("marketCap"),
-                    price = it.optString("price"),
-                    listedAt = it.optLong("listedAt"),
-                    tier = it.optInt("tier"),
-                    change = it.optString("change"),
-                    rank = it.optInt("rank"),
-                    sparkline = parseSparkline(it.optJSONArray("sparkline")),
-                    lowVolume = it.optBoolean("lowVolume"),
-                    coinrankingUrl = it.optString("coinrankingUrl"),
-                    volume = it.optString("24hVolume"),
-                    btcPrice = it.optString("btcPrice"),
-                    contractAddresses = parseContractAddresses(it.optJSONArray("contractAddresses"))
-                )
+                return when (keyEntity) {
+                    ResponseEntry.COINS -> ParseJson.coinParseJson(it)
+                    ResponseEntry.COIN -> ParseJson.coinParseJson(it)
+                    ResponseEntry.PRICE_HISTORY -> ParseJson.priceHistoryParseJson(it)
+                    ResponseEntry.STATS -> ParseJson.coinStatsParseJson(it)
+                    else -> null
+                }
             }
         } catch (e: JSONException) {
-            Log.e("ParseDataWithJson", "parseCoin: ", e)
+            Log.e("ParseDataWithJson", "parseJsonToData: ", e)
         }
         return null
-    }
-
-    private fun parseSparkline(jsonArray: JSONArray?): List<String?> {
-        val sparkline = mutableListOf<String?>()
-        jsonArray?.let {
-            for (i in 0 until it.length()) {
-                sparkline.add(it.optString(i))
-            }
-        }
-        return sparkline
-    }
-
-    private fun parseContractAddresses(jsonArray: JSONArray?): List<String> {
-        val contractAddresses = mutableListOf<String>()
-        jsonArray?.let {
-            for (i in 0 until it.length()) {
-                contractAddresses.add(it.optString(i))
-            }
-        }
-        return contractAddresses
-    }
-
-    private fun parseCoinStats(jsonObject: JSONObject?): CoinStats {
-        return CoinStats(
-            total = jsonObject?.optInt("total") ?: 0,
-            totalCoins = jsonObject?.optInt("totalCoins") ?: 0,
-            totalMarkets = jsonObject?.optInt("totalMarkets") ?: 0,
-            totalExchanges = jsonObject?.optInt("totalExchanges") ?: 0,
-            totalMarketCap = jsonObject?.optString("totalMarketCap") ?: "",
-            total24hVolume = jsonObject?.optString("total24hVolume") ?: ""
-        )
     }
 }
