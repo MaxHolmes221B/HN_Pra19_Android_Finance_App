@@ -2,6 +2,7 @@ package com.example.fina.data.repository.source.remote.fetchjson
 
 import android.os.Handler
 import android.os.Looper
+import android.util.Base64
 import android.util.Log
 import com.example.fina.data.repository.OnResultListener
 import com.example.fina.utils.Constant
@@ -42,17 +43,24 @@ class GetJsonFromUrl<T> constructor(
         val url = URL(urlString)
         val httpURLConnection = url.openConnection() as? HttpURLConnection
 //        httpURLConnection?.setRequestProperty("x-access-token", Constant.BASE_API_KEY)
-        httpURLConnection?.setRequestProperty("x-access-token", "coinranking8af1735d570619af6e8a4bff7925909438489a36d5886a5a")
-        httpURLConnection?.run {
+        val base64ApiKey = Base64.encodeToString(Constant.BASE_API_KEY.toByteArray(), Base64.NO_WRAP)
+        httpURLConnection?.setRequestProperty("x-access-token", base64ApiKey)
+        httpURLConnection?.apply {
             connectTimeout = TIME_OUT
             readTimeout = TIME_OUT
             requestMethod = METHOD_GET
+
             doOutput = true
             connect()
         }
 
+
+
         val bufferedReader = BufferedReader(InputStreamReader(url.openStream()))
+//        val bufferedReader = BufferedReader(InputStreamReader(httpURLConnection?.inputStream))
+//        println("bufferedReader: $bufferedReader")
         val stringBuilder = StringBuilder()
+
         var line: String?
         while (bufferedReader.readLine().also { line = it } != null) {
             stringBuilder.append(line)
@@ -62,6 +70,7 @@ class GetJsonFromUrl<T> constructor(
         Log.d("Response", stringBuilder.toString())
         return stringBuilder.toString()
     }
+
 
     companion object {
         private const val TIME_OUT = 15000

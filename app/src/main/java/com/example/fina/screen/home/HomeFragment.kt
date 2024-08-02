@@ -38,7 +38,7 @@ class HomeFragment :
     private lateinit var mHomePresenter: HomePresenter
     private val mCoinAdapter: CoinsAdapter by lazy { CoinsAdapter() }
     private val mCurrencyAdapter: CurrencyAdapter by lazy { CurrencyAdapter(requireContext(), arrayListOf()) }
-    private var check: Boolean = false
+    private var check: Boolean = true
     override fun inflateViewBinding(inflater: LayoutInflater): FragmentHomeBinding {
         return FragmentHomeBinding.inflate(inflater)
     }
@@ -176,7 +176,7 @@ class HomeFragment :
             }
         }
 
-        check = true
+//        check = true
     }
 
     override fun onError(exception: Exception?) {

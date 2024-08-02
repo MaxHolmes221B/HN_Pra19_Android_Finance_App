@@ -15,6 +15,8 @@ class HomePresenter internal constructor(private val mCoinRepository: CoinReposi
     private var currentParams: ExtraParams = ExtraParams()
     private var currentOrderProperties: OrderProperties = OrderProperties()
 
+    private var count: Int = 3
+
     override fun onStart() {
         TODO("Not yet implemented")
     }
@@ -47,17 +49,29 @@ class HomePresenter internal constructor(private val mCoinRepository: CoinReposi
     }
     fun updateParamsWithCurrency(currency: Currency) {
         this.currentParams.updateReferenceCurrency(currency.uuid)
-        getCoins()
+        count--
+        if(count <= 0) {
+            getCoins()
+        }
+
     }
 
     fun updateParamsWithTimePeriod(timePeriodOption: TimePeriodOption) {
         this.currentParams.updateTimePeriod(timePeriodOption)
-        getCoins()
+        count--
+        if(count <= 0) {
+            getCoins()
+        }
+
     }
 
     fun updateOrderProperties(orderProperties: OrderProperties) {
         this.currentOrderProperties = orderProperties
-        getCoins()
+        count--
+        if(count <= 0) {
+            getCoins()
+        }
+
     }
 
 
