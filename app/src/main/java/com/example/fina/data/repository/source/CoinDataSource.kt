@@ -2,43 +2,24 @@ package com.example.fina.data.repository.source
 
 import com.example.fina.data.model.Coin
 import com.example.fina.data.model.CoinStats
-import com.example.fina.data.model.OrderBy
-import com.example.fina.data.model.OrderDirection
-import com.example.fina.data.model.PriceHistory
-import com.example.fina.data.model.TimePeriod
-import com.example.fina.data.repository.source.remote.OnResultListener
+import com.example.fina.data.model.Currency
+import com.example.fina.data.model.PriceRecord
+import com.example.fina.data.repository.OnResultListener
 import com.example.fina.utils.Constant
+import com.example.fina.utils.CurrencyParam
+import com.example.fina.utils.ExtraParams
+import com.example.fina.utils.OrderProperties
 
 interface CoinDataSource {
     interface Local {
-        fun getLocalCoins(listener: OnResultListener<MutableList<Coin>>)
+        fun getLocalCoins(listener: OnResultListener<List<Coin>>)
     }
 
     interface Remote {
         fun getCoins(
-            referenceCurrencyUuid: String = Constant.USD_UUID,
-            timePeriod: TimePeriod = TimePeriod.TWENTY_FOUR_HOURS,
-            uuids: MutableList<String> = mutableListOf(),
-            search: String? = null,
-            orderBy: OrderBy = OrderBy.MARKET_CAP,
-            orderDirection: OrderDirection = OrderDirection.DESC,
-            limit: Int = Constant.DEFAULT_LIMIT,
-            offset: Int = 0,
-            listener: OnResultListener<MutableList<Coin>>
-        )
-
-        fun getCoinDetail(
-            uuid: String,
-            referenceCurrencyUuid: String = Constant.USD_UUID,
-            timePeriod: TimePeriod = TimePeriod.TWENTY_FOUR_HOURS,
-            listener: OnResultListener<Coin>,
-        )
-
-        fun getCoinPriceHistory(
-            uuid: String,
-            referenceCurrencyUuid: String = Constant.USD_UUID,
-            timePeriod: TimePeriod = TimePeriod.TWENTY_FOUR_HOURS,
-            listener: OnResultListener<MutableList<PriceHistory>>
+        params: ExtraParams = ExtraParams(),
+        orderProperties: OrderProperties = OrderProperties(),
+        listener: OnResultListener<List<Coin>>,
         )
 
         fun getCoinStats(
@@ -46,5 +27,20 @@ interface CoinDataSource {
             listener: OnResultListener<CoinStats>
         )
 
+        fun getCoinDetail(
+            uuid: String,
+            params: ExtraParams,
+            listener: OnResultListener<Coin>,
+        )
+
+        fun getPriceRecord(
+            uuid: String,
+            params: ExtraParams,
+            listener: OnResultListener<List<PriceRecord>>,
+        )
+        fun getCurrencies(
+            params: CurrencyParam,
+            listener: OnResultListener<List<Currency>>
+        )
     }
 }

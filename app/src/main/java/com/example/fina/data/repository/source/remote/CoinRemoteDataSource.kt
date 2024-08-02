@@ -2,62 +2,43 @@ package com.example.fina.data.repository.source.remote
 
 import com.example.fina.data.model.Coin
 import com.example.fina.data.model.CoinStats
-import com.example.fina.data.model.OrderBy
-import com.example.fina.data.model.OrderDirection
-import com.example.fina.data.model.PriceHistory
-import com.example.fina.data.model.ResponseEntry
-import com.example.fina.data.model.TimePeriod
+import com.example.fina.data.model.Currency
+import com.example.fina.data.model.PriceRecord
+import com.example.fina.utils.ResponseEntry
+import com.example.fina.data.repository.OnResultListener
 import com.example.fina.data.repository.source.CoinDataSource
 import com.example.fina.data.repository.source.remote.fetchjson.GetJsonFromUrl
 import com.example.fina.utils.Constant
+import com.example.fina.utils.CurrencyParam
+import com.example.fina.utils.ExtraParams
+import com.example.fina.utils.OrderProperties
 
 class CoinRemoteDataSource : CoinDataSource.Remote {
 
     override fun getCoins(
-        referenceCurrencyUuid: String,
-        timePeriod: TimePeriod,
-        uuids: MutableList<String>,
-        search: String?,
-        orderBy: OrderBy,
-        orderDirection: OrderDirection,
-        limit: Int,
-        offset: Int,
-        listener: OnResultListener<MutableList<Coin>>
+        params: ExtraParams,
+        orderProperties: OrderProperties,
+        listener: OnResultListener<List<Coin>>,
     ) {
-        val url = StringBuilder(Constant.BASE_URL_COINS)
-            .append("referenceCurrencyUuid=$referenceCurrencyUuid")
-            .append("&timePeriod=$timePeriod")
-            .append("&orderBy=$orderBy")
-            .append("&orderDirection=$orderDirection")
-            .append("&limit=$limit")
-            .append("&offset=$offset")
-
-        search?.let {
-            url.append("&search=$search")
-        }
-
-        uuids.forEach {
-            url.append("&uuids[]=$it")
-        }
-
+        println("Extra:$params")
+        println("Order:$orderProperties")
+        val url = "${Constant.BASE_URL_COINS}?$params&$orderProperties"
+        println("url: $url")
         GetJsonFromUrl(
-            url.toString(),
+            url,
             ResponseEntry.COINS,
             listener,
         )
     }
 
-
     override fun getCoinDetail(
         uuid: String,
-        referenceCurrencyUuid: String,
-        timePeriod: TimePeriod,
-        listener: OnResultListener<Coin>
+        params: ExtraParams,
+        listener: OnResultListener<Coin>,
     ) {
         val url = StringBuilder(Constant.BASE_URL_COIN_DETAIL)
         url.append(uuid)
-        url.append("referenceCurrencyUuid=$referenceCurrencyUuid")
-        url.append("&timePeriod=$timePeriod")
+        url.append("?$params")
         GetJsonFromUrl(
             url.toString(),
             ResponseEntry.COIN,
@@ -65,17 +46,14 @@ class CoinRemoteDataSource : CoinDataSource.Remote {
         )
     }
 
-    override fun getCoinPriceHistory(
+    override fun getPriceRecord(
         uuid: String,
-        referenceCurrencyUuid: String,
-        timePeriod: TimePeriod,
-        listener: OnResultListener<MutableList<PriceHistory>>
+        params: ExtraParams,
+        listener: OnResultListener<List<PriceRecord>>,
     ) {
         val url = StringBuilder(Constant.BASE_URL_COIN_DETAIL)
         url.append(uuid)
-        url.append("/history?")
-        url.append("referenceCurrencyUuid=$referenceCurrencyUuid")
-        url.append("&timePeriod=$timePeriod")
+        url.append("/history?$params")
         GetJsonFromUrl(
             url.toString(),
             ResponseEntry.PRICE_HISTORY,
@@ -87,12 +65,23 @@ class CoinRemoteDataSource : CoinDataSource.Remote {
         referenceCurrencyUuid: String,
         listener: OnResultListener<CoinStats>
     ) {
-        val url = StringBuilder(Constant.BASE_URL_COINS)
-            .append("referenceCurrencyUuid=$referenceCurrencyUuid")
+        val url = "${Constant.BASE_URL_COINS}?referenceCurrencyUuid=$referenceCurrencyUuid"
 
         GetJsonFromUrl(
-            url.toString(),
+            url,
             ResponseEntry.STATS,
+            listener,
+        )
+    }
+
+    override fun getCurrencies(
+        params: CurrencyParam,
+        listener: OnResultListener<List<Currency>>) {
+        val url = "${Constant.BASE_URL_CURRENCIES}?$params"
+        println("url currencies: $url")
+        GetJsonFromUrl(
+            url,
+            ResponseEntry.CURRENCIES,
             listener,
         )
     }

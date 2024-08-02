@@ -1,11 +1,11 @@
 package com.example.fina.data.repository.source.local
 
 import com.example.fina.data.model.Coin
-import com.example.fina.data.repository.source.remote.OnResultListener
+import com.example.fina.data.repository.OnResultListener
 import com.example.fina.data.repository.source.CoinDataSource
 
 class CoinLocalDataSource : CoinDataSource.Local {
-    override fun getLocalCoins(listener: OnResultListener<MutableList<Coin>>) {
+    override fun getLocalCoins(listener: OnResultListener<List<Coin>>) {
         TODO("Not yet implemented")
     }
 

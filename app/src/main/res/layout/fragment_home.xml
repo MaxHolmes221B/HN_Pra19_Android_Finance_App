@@ -144,7 +144,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/filterLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -158,21 +158,30 @@
             android:id="@+id/spinnerCurrency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@+id/filterLayout"
+            app:layout_constraintTop_toTopOf="@id/filterLayout"
+            app:layout_constraintBottom_toBottomOf="@id/filterLayout"
             />
 
         <Spinner
             android:id="@+id/spinnerTimePeriod"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="@+id/spinnerCurrency"
+            app:layout_constraintEnd_toEndOf="@+id/spinnerOrderBy"
+            app:layout_constraintTop_toTopOf="@+id/filterLayout"
+            app:layout_constraintBottom_toBottomOf="@id/filterLayout"
             />
 
         <Spinner
             android:id="@+id/spinnerOrderBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp" />
-    </LinearLayout>
+            app:layout_constraintEnd_toEndOf="@+id/filterLayout"
+            app:layout_constraintTop_toTopOf="@+id/filterLayout"
+            app:layout_constraintBottom_toBottomOf="@id/filterLayout"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewCoin"
