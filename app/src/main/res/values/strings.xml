@@ -1,3 +1,30 @@
 <resources>
-    <string name="app_name">Android-template</string>
+    <string name="app_name">Crypto Currency</string>
+    <string name="coin_image">coin_image</string>
+    <string name="volume">Vol</string>
+    <string name="market_cap">Market cap:</string>
+    <string name="time_period">(24h):</string>
+    <string name="home">Home</string>
+    <string name="favourite">Favourite</string>
+    <string name="search">Search</string>
+    <string name="setting">Setting</string>
+    <string name="percentage_text">%1$d%%</string>
+    <string name="total_coins_stats">Total Coins:</string>
+    <string name="total_market_cap_stats">Total Market Cap:</string>
+    <string name="total_marketplace_stats">Total Marketplace:</string>
+    <string name="vol_24h_stats">Vol (24h):</string>
+    <string name="one_hour">1 hour</string>
+    <string name="marketCap">Market Cap</string>
+    <string name="price">Gia ca</string>
+    <string name="volume24h">Volume (24h)</string>
+    <string name="change">Change</string>
+    <string name="listedAt">Listed At</string>
+    <string name="oneHour">1h</string>
+    <string name="threeHour">3h</string>
+    <string name="twelveHour">12h</string>
+    <string name="twentyFourHour">24h</string>
+    <string name="sevenDays">7 Days</string>
+    <string name="thirtyDays">30 Days</string>
+    <string name="point_down">point_down</string>
+
 </resources>
