@@ -2,7 +2,8 @@ package com.example.fina.data.repository.source.remote.fetchjson
 
 import com.example.fina.data.model.Coin
 import com.example.fina.data.model.CoinStats
-import com.example.fina.data.model.PriceHistory
+import com.example.fina.data.model.Currency
+import com.example.fina.data.model.PriceRecord
 import com.example.fina.data.model.Supply
 import org.json.JSONArray
 import org.json.JSONObject
@@ -25,7 +26,7 @@ object ParseJson {
             volume24h = jsonObject.optString("24hVolume")
             btcPrice = jsonObject.getString("btcPrice")
             supply = supplyParseJson(jsonObject.optJSONObject("supply"))
-            allTimeHigh = priceHistoryParseJson(jsonObject.optJSONObject("allTimeHigh"))
+            allTimeHigh = priceRecordParseJson(jsonObject.optJSONObject("allTimeHigh"))
         }
 
     fun coinStatsParseJson(jsonObject: JSONObject): CoinStats {
@@ -61,12 +62,21 @@ object ParseJson {
         return supply
     }
 
-    fun priceHistoryParseJson(jsonObject: JSONObject?): PriceHistory {
-        val priceHistory = PriceHistory()
+    fun priceRecordParseJson(jsonObject: JSONObject?): PriceRecord {
+        val priceRecord = PriceRecord()
         jsonObject?.let {
-            priceHistory.price = it.getString("price")
-            priceHistory.timestamp = it.getLong("timestamp")
+            priceRecord.price = it.getString("price")
+            priceRecord.timestamp = it.getLong("timestamp")
         }
-        return priceHistory
+        return priceRecord
     }
+    fun currencyParseJson(jsonObject: JSONObject) =
+        Currency().apply {
+            uuid = jsonObject.getString("uuid")
+            type = jsonObject.getString("type")
+            iconUrl = jsonObject.optString("iconUrl")
+            name = jsonObject.getString("name")
+            symbol = jsonObject.optString("symbol")
+            sign = jsonObject.optString("sign")
+        }
 }

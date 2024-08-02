@@ -1,7 +1,7 @@
 package com.example.fina.data.repository.source.remote.fetchjson
 
 import android.util.Log
-import com.example.fina.data.model.ResponseEntry
+import com.example.fina.utils.ResponseEntry
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -37,6 +37,12 @@ object ParseDataWithJson {
                     keyEntity
                 )
 
+            ResponseEntry.CURRENCIES ->
+                parseJsonToListObject(
+                    jsonDataObject?.optJSONArray(ResponseEntry.CURRENCIES),
+                    keyEntity
+                )
+
             else -> Any()
         }
     }
@@ -68,8 +74,9 @@ object ParseDataWithJson {
                 return when (keyEntity) {
                     ResponseEntry.COINS -> ParseJson.coinParseJson(it)
                     ResponseEntry.COIN -> ParseJson.coinParseJson(it)
-                    ResponseEntry.PRICE_HISTORY -> ParseJson.priceHistoryParseJson(it)
+                    ResponseEntry.PRICE_HISTORY -> ParseJson.priceRecordParseJson(it)
                     ResponseEntry.STATS -> ParseJson.coinStatsParseJson(it)
+                    ResponseEntry.CURRENCIES -> ParseJson.currencyParseJson(it)
                     else -> null
                 }
             }

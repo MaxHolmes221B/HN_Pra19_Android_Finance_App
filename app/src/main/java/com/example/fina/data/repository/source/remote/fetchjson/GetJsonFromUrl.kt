@@ -3,7 +3,8 @@ package com.example.fina.data.repository.source.remote.fetchjson
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.fina.data.repository.source.remote.OnResultListener
+import com.example.fina.data.repository.OnResultListener
+import com.example.fina.utils.Constant
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -40,6 +41,7 @@ class GetJsonFromUrl<T> constructor(
     private fun getJsonStringFromUrl(urlString: String): String {
         val url = URL(urlString)
         val httpURLConnection = url.openConnection() as? HttpURLConnection
+        httpURLConnection?.setRequestProperty("x-access-token", Constant.BASE_API_KEY)
         httpURLConnection?.run {
             connectTimeout = TIME_OUT
             readTimeout = TIME_OUT
